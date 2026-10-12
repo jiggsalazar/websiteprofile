@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Development Section Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1c1c;
+      --paper: #fbfaf7;
+      --panel: #ffffff;
+      --muted: #65625e;
+      --line: #e6e0da;
+      --yellow: #f5b501;
+      --green: #738e5c;
+      --shadow: 0 24px 70px rgba(28, 28, 28, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Urbanist", system-ui, sans-serif;
+    }
+
+    .web-focus-section {
+      overflow: hidden;
+      padding: 76px 20px 82px;
+      background:
+        radial-gradient(circle at 8% 22%, rgba(245, 181, 1, 0.13), transparent 26%),
+        linear-gradient(180deg, #fff 0%, var(--paper) 100%);
+    }
+
+    .web-focus-inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .web-focus-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      padding: 9px 16px;
+      border: 1px solid rgba(245, 181, 1, 0.55);
+      border-radius: 999px;
+      background: rgba(245, 181, 1, 0.11);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .web-focus-kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--yellow);
+      box-shadow: 0 0 0 7px rgba(245, 181, 1, 0.16);
+    }
+
+    .web-focus-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.65fr);
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .web-focus-title {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 0.9;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .web-focus-title span {
+      color: var(--yellow);
+    }
+
+    .web-focus-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .web-focus-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .web-card {
+      min-height: 250px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .web-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(245, 181, 1, 0.7);
+      box-shadow: 0 28px 76px rgba(28, 28, 28, 0.12);
+    }
+
+    .web-card-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 26px;
+      border-radius: 16px;
+      background: var(--ink);
+      color: var(--yellow);
+    }
+
+    .web-card-icon svg {
+      width: 25px;
+      height: 25px;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .web-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.05;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .web-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .web-process {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--ink);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .web-portfolio-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 22px;
+      padding: 24px 28px;
+      border: 1px solid rgba(28, 28, 28, 0.1);
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .web-portfolio-cta p {
+      max-width: 670px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .web-portfolio-cta strong {
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .web-portfolio-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 0 24px;
+      border-radius: 999px;
+      background: var(--yellow);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .web-portfolio-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(245, 181, 1, 0.28);
+    }
+
+    .web-portfolio-button svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .web-step {
+      min-height: 128px;
+      padding: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .web-step:last-child {
+      border-right: 0;
+    }
+
+    .web-step strong {
+      display: block;
+      margin-bottom: 16px;
+      color: var(--yellow);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+    .web-step span {
+      display: block;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1023px) {
+      .web-focus-hero {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .web-focus-copy {
+        max-width: 720px;
+      }
+
+      .web-focus-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .web-process {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .web-step:nth-child(2) {
+        border-right: 0;
+      }
+
+      .web-step:nth-child(1),
+      .web-step:nth-child(2),
+      .web-step:nth-child(3),
+      .web-step:nth-child(4) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .web-step:nth-child(4) {
+        border-right: 0;
+      }
+
+      .web-step:nth-child(5) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .web-focus-section {
+        padding: 48px 16px 54px;
+      }
+
+      .web-focus-title {
+        font-size: clamp(42px, 14vw, 58px);
+      }
+
+      .web-focus-copy {
+        font-size: 17px;
+      }
+
+      .web-portfolio-cta {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .web-portfolio-cta p {
+        font-size: 17px;
+      }
+
+      .web-portfolio-button {
+        width: 100%;
+      }
+
+      .web-focus-grid,
+      .web-process {
+        grid-template-columns: 1fr;
+      }
+
+      .web-process {
+        overflow-x: visible;
+      }
+
+      .web-card {
+        min-height: auto;
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .web-card-icon {
+        margin-bottom: 18px;
+      }
+
+      .web-step,
+      .web-step:nth-child(2) {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .web-step:last-child {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="web-focus-section" aria-labelledby="web-focus-title">
+    <div class="web-focus-inner">
+      <p class="web-focus-kicker">What I Bring</p>
+      <div class="web-focus-hero">
+        <h1 class="web-focus-title" id="web-focus-title">Wonderful websites, <span>built to work.</span></h1>
+        <p class="web-focus-copy">I focus on web development: clean pages, responsive layouts, smooth user flows, and practical features that help your business look professional and function better online.</p>
+      </div>
+
+      <div class="web-focus-grid" aria-label="Web development services">
+        <article class="web-card">
+          <div class="web-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m8 9-4 3 4 3"/><path d="m16 9 4 3-4 3"/><path d="m14 4-4 16"/></svg>
+          </div>
+          <h3>Custom Website Builds</h3>
+          <p>Modern websites shaped around your brand, offers, and customer journey.</p>
+        </article>
+
+        <article class="web-card">
+          <div class="web-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+          </div>
+          <h3>Responsive Design</h3>
+          <p>Layouts that feel clean and easy to use on phones, tablets, laptops, and desktops.</p>
+        </article>
+
+        <article class="web-card">
+          <div class="web-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/><path d="M17 17l2 2 4-5"/></svg>
+          </div>
+          <h3>Functional Pages</h3>
+          <p>Contact forms, service pages, portfolios, landing pages, and useful website sections.</p>
+        </article>
+
+        <article class="web-card">
+          <div class="web-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z"/></svg>
+          </div>
+          <h3>Performance Polish</h3>
+          <p>Careful spacing, faster loading, cleaner structure, and details that make the site feel finished.</p>
+        </article>
+      </div>
+
+      <div class="web-process" aria-label="Website build process">
+        <div class="web-step"><strong>01 Plan</strong><span>Clarify the goal, pages, and must-have features.</span></div>
+        <div class="web-step"><strong>02 Design</strong><span>Create a clean visual direction that fits your brand.</span></div>
+        <div class="web-step"><strong>03 Build</strong><span>Turn the design into a responsive, working website.</span></div>
+        <div class="web-step"><strong>04 Refine</strong><span>Test the details and polish the final experience.</span></div>
+        <div class="web-step"><strong>05 Launch</strong><span>Deploy the website online so it is live and ready to share.</span></div>
+      </div>
+
+      <div class="web-portfolio-cta">
+        <p><strong>Want to see the kind of websites I build?</strong> A few selected website designs and project concepts are waiting in my portfolio.</p>
+        <a class="web-portfolio-button" href="../portfolio/">
+          View Portfolio
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
