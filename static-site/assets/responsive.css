@@ -2454,3 +2454,37 @@ body {
     width: min(118%, 520px);
   }
 }
+
+/* Mobile fix: keep the full-width lifestyle portrait section contained and nicely cropped. */
+@media (max-width: 767px) {
+  .breakdance .bde-section-24-186 .section-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 22px 18px 28px !important;
+  }
+
+  .breakdance .bde-image-24-187,
+  .breakdance .bde-image-24-187 .breakdance-image-container,
+  .breakdance .bde-image-24-187 .breakdance-image-clip {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    border-radius: 28px !important;
+  }
+
+  .breakdance .bde-image-24-187 .breakdance-image-object {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: clamp(260px, 72vw, 390px) !important;
+    object-fit: cover !important;
+    object-position: 50% 42% !important;
+  }
+}
+
+@media (max-width: 767px) and (orientation: landscape) {
+  .breakdance .bde-image-24-187 .breakdance-image-object {
+    height: min(68vh, 360px) !important;
+    object-position: 50% 40% !important;
+  }
+}
