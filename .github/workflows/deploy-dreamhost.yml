@@ -8,6 +8,7 @@ on:
       - 'scripts/deploy_dreamhost.py'
       - 'scripts/dreamhost_known_hosts'
       - 'scripts/requirements-deploy.txt'
+      - 'tests/**'
       - '.github/workflows/deploy-dreamhost.yml'
   workflow_dispatch:
 
@@ -33,7 +34,7 @@ jobs:
           python-version: '3.12'
       - name: Validate website and deployment tests
         run: |
-          python -m unittest discover -s tests -p 'test_deploy_dreamhost.py'
+          python -m unittest discover -s tests -p 'test_*.py'
           python scripts/deploy_dreamhost.py --check
       - name: Check hosting credential
         env:
@@ -49,4 +50,5 @@ jobs:
         env:
           DREAMHOST_SFTP_PASSWORD: ${{ secrets.DREAMHOST_SFTP_PASSWORD }}
           DEPLOY_COMMIT: ${{ github.sha }}
+          PYTHONUNBUFFERED: '1'
         run: python scripts/deploy_dreamhost.py

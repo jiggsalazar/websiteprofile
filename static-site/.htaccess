@@ -1,0 +1,32 @@
+# BEGIN MADEBYJIGG MANAGED
+# The deployment script preserves DreamHost rules outside this block.
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.madebyjigg\.com$ [NC]
+RewriteRule ^ https://madebyjigg.com%{REQUEST_URI} [R=301,L,NE]
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[?\s] [NC]
+RewriteRule ^(.*)index\.html$ /$1 [R=301,L,NE]
+</IfModule>
+
+<FilesMatch "^(\.deployment-manifest\.json|.*\.uploading|\.env.*|.*\.(?:bak|sql|log))$">
+Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+# Hashes are regenerated for the exact inline scripts on every deployment.
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' __INLINE_SCRIPT_HASHES__; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; frame-ancestors 'self'; upgrade-insecure-requests"
+<FilesMatch "\.(?:html|css|js|json|xml|txt)$">
+Header set Cache-Control "public, max-age=0, must-revalidate"
+</FilesMatch>
+</IfModule>
+# END MADEBYJIGG MANAGED

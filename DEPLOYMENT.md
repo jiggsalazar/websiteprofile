@@ -34,7 +34,7 @@ publication.
 ## Future updates
 
 1. Edit files in `static-site/` and check the requested behavior locally.
-2. Run `python -m unittest discover -s tests -p test_deploy_dreamhost.py` and
+2. Run `python -m unittest discover -s tests -p 'test_*.py'` and
    `python scripts/deploy_dreamhost.py --check`.
 3. Commit and push to `main`, or merge an approved pull request into `main`.
 4. Wait for the GitHub deployment workflow to succeed before reporting the site
@@ -48,6 +48,11 @@ shared CSS, Messenger script, and commit marker over HTTPS. Concurrent deploys
 are serialized. It preserves existing server-only files and does not delete
 files removed from Git; intentionally retiring a public URL needs an explicit
 removal or redirect.
+
+The public root allowlist also contains robots.txt, sitemap.xml, favicon.svg,
+404.html and the managed .htaccess configuration. Deployment preserves existing
+server rules outside the managed block, renders CSP script hashes for the current
+HTML, and restores the old .htaccess if live checks fail. See SECURITY-SEO.md.
 
 Existing cached images/CSS/JavaScript can remain cached briefly. When changing
 an asset, update its version in the referring page or give it a new filename.

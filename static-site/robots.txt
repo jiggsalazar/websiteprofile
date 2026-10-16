@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /logs/
+Disallow: /backup/
+Disallow: /wp-admin/
+
+Sitemap: https://madebyjigg.com/sitemap.xml

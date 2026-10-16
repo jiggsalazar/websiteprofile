@@ -1,10 +1,12 @@
 """Deploy tracked public website files over SFTP, without requiring shell access."""
 
 import argparse
+import base64
 import hashlib
 import io
 import json
 import os
+import re
 from pathlib import Path, PurePosixPath
 import stat
 import subprocess
@@ -21,13 +23,40 @@ MANIFEST = '.deployment-manifest.json'
 MARKER = 'deployment-version.json'
 PAGES = ('index.html', 'about/index.html', 'portfolio/index.html', 'contact/index.html')
 PUBLIC_DIRS = {'assets', 'about', 'contact', 'portfolio', 'previews', 'wp-content'}
+PUBLIC_ROOT = {'index.html', '.htaccess', 'robots.txt', 'sitemap.xml', '404.html', 'favicon.svg'}
 
 
 def public_file(name):
+    if name in PUBLIC_ROOT:
+        return True
     path = PurePosixPath(name)
     if path.is_absolute() or '..' in path.parts or any(p.startswith('.') for p in path.parts):
         return False
     return name == 'index.html' or (len(path.parts) > 1 and path.parts[0] in PUBLIC_DIRS)
+
+
+def security_config(template, files):
+    hashes = set()
+    for name, data in files.items():
+        if name.endswith('.html'):
+            html = data.decode('utf-8-sig').replace('\r\n', '\n').replace('\r', '\n')
+            for attrs, body in re.findall(r'<script\b([^>]*)>(.*?)</script\s*>', html, re.I | re.S):
+                if not re.search(r'\bsrc\s*=', attrs, re.I) and body.strip():
+                    digest = base64.b64encode(hashlib.sha256(body.encode()).digest()).decode()
+                    hashes.add("'sha256-" + digest + "'")
+    return template.replace(b'__INLINE_SCRIPT_HASHES__', ' '.join(sorted(hashes)).encode())
+
+
+def merge_security_config(existing, managed):
+    start = b'# BEGIN MADEBYJIGG MANAGED'
+    end = b'# END MADEBYJIGG MANAGED'
+    if start in existing:
+        before, rest = existing.split(start, 1)
+        if end not in rest:
+            raise ValueError('Incomplete managed .htaccess block; refusing to overwrite')
+        _, after = rest.split(end, 1)
+        return before + managed.strip() + after
+    return managed.rstrip() + b'\n\n' + existing
 
 
 def collect_files():
@@ -48,6 +77,8 @@ def collect_files():
     for name in PAGES + ('assets/responsive.css', 'assets/messenger.js'):
         if name not in files or not files[name]:
             raise ValueError(f'Required website file is missing or empty: {name}')
+    if '.htaccess' in files:
+        files['.htaccess'] = security_config(files['.htaccess'], files)
     return files
 
 
@@ -96,6 +127,7 @@ def upload(sftp, name, data):
 def verify(files, commit):
     # A unique query avoids a cached response hiding an unsuccessful upload.
     names = list(PAGES) + [MARKER, 'assets/messenger.js', 'assets/responsive.css']
+    names += [n for n in ('robots.txt', 'sitemap.xml') if n in files]
     expected = dict(files)
     expected[MARKER] = json.dumps({'commit': commit}, sort_keys=True).encode()
     for attempt in range(6):
@@ -105,6 +137,11 @@ def verify(files, commit):
                 with urlopen(request, timeout=30) as response:
                     if response.read() != expected[name]:
                         raise RuntimeError(f'Live file does not match GitHub: {name}')
+                    if '.htaccess' in files and name in PAGES:
+                        for header in ('Content-Security-Policy', 'Strict-Transport-Security',
+                                       'X-Content-Type-Options', 'Referrer-Policy'):
+                            if not response.headers.get(header):
+                                raise RuntimeError(f'Missing live security header: {header}')
             print(f'Verified {URL} at commit {commit}')
             return
         except Exception:
@@ -145,12 +182,27 @@ def main():
             hashes = {name: file_hash(data) for name, data in files.items()}
             # Assets first, HTML last, so pages cannot reference unuploaded assets.
             changed = sorted((n for n in files if previous.get(n) != hashes[n]),
-                             key=lambda n: (n.endswith('.html'), n))
+                             key=lambda n: (2 if n == '.htaccess' else 1 if n.endswith('.html') else 0, n))
+            old_security = None
             for name in changed:
-                upload(sftp, name, files[name])
+                data = files[name]
+                if name == '.htaccess':
+                    try:
+                        with sftp.open(REMOTE + '/.htaccess', 'rb') as existing:
+                            old_security = existing.read()
+                    except FileNotFoundError:
+                        old_security = b''
+                    data = merge_security_config(old_security, data)
+                upload(sftp, name, data)
                 print(f'Uploaded {name}')
             upload(sftp, MARKER, json.dumps({'commit': commit}, sort_keys=True).encode())
-            verify(files, commit)
+            try:
+                verify(files, commit)
+            except Exception:
+                if old_security is not None:
+                    upload(sftp, '.htaccess', old_security)
+                    print('Restored the previous server configuration after failed live checks')
+                raise
             # Save the incremental manifest only after the public checks succeed.
             upload(sftp, MANIFEST, json.dumps(hashes, sort_keys=True).encode())
     summary = f'Deployed {commit} to {URL}; {len(changed)} files uploaded. Live checks passed.\n'
