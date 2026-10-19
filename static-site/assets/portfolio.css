@@ -228,3 +228,56 @@
 @media (max-width: 767px) {
   .breakdance .portfolio-scroll-cue { margin-top: 8px; font-size: 14px; }
 }
+
+/* Touch-friendly previews: every scrolling card is a real, keyboard-usable viewer. */
+.breakdance .bde-scrolling-image[data-preview-image] {
+  cursor: zoom-in;
+}
+.breakdance .bde-scrolling-image[data-preview-image]:focus-visible {
+  outline: 3px solid #ffb900;
+  outline-offset: 5px;
+}
+.portfolio-preview-dialog {
+  width: min(94vw, 1400px);
+  height: min(94vh, 1000px);
+  max-width: none;
+  max-height: none;
+  padding: 18px;
+  border: 0;
+  border-radius: 18px;
+  background: rgba(18, 18, 18, .96);
+  color: #fff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .45);
+}
+.portfolio-preview-dialog::backdrop { background: rgba(0, 0, 0, .8); }
+.portfolio-preview-dialog__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+.portfolio-preview-dialog__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 50%;
+  background: rgba(18,18,18,.82);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .portfolio-preview-dialog {
+    width: 100vw;
+    height: 100dvh;
+    padding: 10px;
+    border-radius: 0;
+  }
+  .portfolio-preview-dialog__close { top: 12px; right: 12px; }
+}
