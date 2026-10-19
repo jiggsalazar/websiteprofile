@@ -10,7 +10,7 @@
       timer = setTimeout(function () {
         controller.abort();
         reject(new Error('Delivery could not be confirmed.'));
-      }, options.timeout || 20000);
+      }, options.timeout || 40000);
     });
     try {
       return await Promise.race([timeout, (async function () {

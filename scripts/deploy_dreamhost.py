@@ -22,6 +22,7 @@ REMOTE = '/home/dh_924vay/madebyjigg.com'
 URL = 'https://madebyjigg.com'
 MANIFEST = '.deployment-manifest.json'
 MARKER = 'deployment-version.json'
+MAIL_DIRECTORY = '/home/dh_924vay/.madebyjigg-mail'
 PAGES = ('index.html', 'about/index.html', 'portfolio/index.html', 'contact/index.html')
 PUBLIC_DIRS = {'assets', 'about', 'contact', 'portfolio', 'previews', 'wp-content'}
 PUBLIC_ROOT = {'index.html', '.htaccess', 'robots.txt', 'sitemap.xml', '404.html', 'favicon.svg'}
@@ -160,6 +161,39 @@ def verify(files, commit):
             time.sleep(5)
 
 
+def configure_mail(sftp, password):
+    if not password:
+        print('No new CONTACT_SMTP_PASSWORD supplied; existing mail configuration is preserved.')
+        return
+    password = ''.join(password.split())
+    if len(password) != 16 or not password.isascii() or not password.isalnum():
+        raise ValueError('CONTACT_SMTP_PASSWORD must be a 16-character Google app password')
+    home = str(PurePosixPath(MAIL_DIRECTORY).parent)
+    if sftp.normalize(home) != home:
+        raise ValueError('Mail configuration home resolves elsewhere')
+    try:
+        info = sftp.lstat(MAIL_DIRECTORY)
+    except FileNotFoundError:
+        sftp.mkdir(MAIL_DIRECTORY, mode=0o700)
+        info = sftp.lstat(MAIL_DIRECTORY)
+    if not stat.S_ISDIR(info.st_mode):
+        raise ValueError('Mail directory must not be a symlink')
+    sftp.chmod(MAIL_DIRECTORY, 0o700)
+    path = MAIL_DIRECTORY + '/smtp.json'
+    temporary = path + '.uploading'
+    for target in (path, temporary):
+        try:
+            if not stat.S_ISREG(sftp.lstat(target).st_mode):
+                raise ValueError('Mail configuration must not be a symlink')
+        except FileNotFoundError:
+            pass
+    data = json.dumps({'username': 'jiggsalazar89@gmail.com', 'password': password}).encode()
+    sftp.putfo(io.BytesIO(data), temporary, file_size=len(data), confirm=True)
+    sftp.chmod(temporary, 0o600)
+    sftp.posix_rename(temporary, path)
+    print('Updated private Gmail delivery configuration outside the public website.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Validate public files without connecting')
@@ -205,6 +239,7 @@ def main():
                     data = merge_security_config(old_security, data)
                 upload(sftp, name, data)
                 print(f'Uploaded {name}')
+            configure_mail(sftp, os.environ.get('CONTACT_SMTP_PASSWORD'))
             upload(sftp, MARKER, json.dumps({'commit': commit}, sort_keys=True).encode())
             try:
                 verify(files, commit)

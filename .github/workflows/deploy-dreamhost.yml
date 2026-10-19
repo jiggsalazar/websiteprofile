@@ -53,5 +53,6 @@ jobs:
         env:
           DREAMHOST_SFTP_PASSWORD: ${{ secrets.DREAMHOST_SFTP_PASSWORD }}
           DEPLOY_COMMIT: ${{ github.sha }}
+          CONTACT_SMTP_PASSWORD: ${{ secrets.CONTACT_SMTP_PASSWORD }}
           PYTHONUNBUFFERED: '1'
         run: python scripts/deploy_dreamhost.py

@@ -51,6 +51,28 @@ class DeploymentTests(unittest.TestCase):
             deploy.upload(sftp, 'index.html', b'new homepage')
         sftp.putfo.assert_not_called()
 
+    def test_mail_secret_is_private_and_outside_document_root(self):
+        sftp = Mock()
+        sftp.normalize.return_value = '/home/dh_924vay'
+        sftp.lstat.side_effect = [SimpleNamespace(st_mode=stat.S_IFDIR),
+                                 FileNotFoundError(), FileNotFoundError()]
+        deploy.configure_mail(sftp, 'abcd efgh ijkl mnop')  # Fake app password.
+        target = deploy.MAIL_DIRECTORY + '/smtp.json'
+        self.assertFalse(target.startswith(deploy.REMOTE + '/'))
+        sftp.chmod.assert_any_call(deploy.MAIL_DIRECTORY, 0o700)
+        sftp.chmod.assert_any_call(target + '.uploading', 0o600)
+        sftp.posix_rename.assert_called_once_with(target + '.uploading', target)
+
+    def test_mail_secret_does_not_follow_symlinks_or_erase_existing_config(self):
+        sftp = Mock()
+        deploy.configure_mail(sftp, '')
+        sftp.putfo.assert_not_called()
+        sftp.normalize.return_value = '/home/dh_924vay'
+        sftp.lstat.return_value = SimpleNamespace(st_mode=stat.S_IFLNK)
+        with self.assertRaises(ValueError):
+            deploy.configure_mail(sftp, 'abcdefghijklmnop')
+        sftp.putfo.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

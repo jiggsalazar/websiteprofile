@@ -15,6 +15,12 @@ for DreamHost website user **dh_924vay**, not the DreamHost panel password.
 Enter it directly into GitHub. Never put the password in chat, a tracked file,
 an issue, or a command argument.
 
+Contact email delivery can additionally use the CONTACT_SMTP_PASSWORD Actions
+secret, entered privately by the owner. This is a Google app password for
+jiggsalazar89@gmail.com, not the hosting password. The deployer writes it outside
+the document root with private permissions; see CONTACT-FORMS.md for setup and
+delivery checks.
+
 The server, account, and destination are already configured:
 
 - Host: `sin1-shared-01.dreamhost.com`, SFTP port `22`.

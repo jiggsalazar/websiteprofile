@@ -50,6 +50,35 @@ function contact_rate_allowed(string $ip): bool {
     return $allowed && $written !== false;
 }
 
+function contact_mailer(array $fields, array $config): \PHPMailer\PHPMailer\PHPMailer {
+    require_once __DIR__ . '/vendor/phpmailer/Exception.php';
+    require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
+    require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
+    if (($config['username'] ?? '') !== 'jiggsalazar89@gmail.com' ||
+        !is_string($config['password'] ?? null) || $config['password'] === '') {
+        throw new RuntimeException('Mail configuration is incomplete.');
+    }
+    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->Port = 465;
+    $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+    $mail->SMTPAuth = true;
+    $mail->Username = 'jiggsalazar89@gmail.com';
+    $mail->Password = $config['password'];
+    $mail->Timeout = 5;
+    $mail->Timelimit = 5;
+    $mail->SMTPDebug = 0;
+    $mail->CharSet = 'UTF-8';
+    $mail->setFrom('jiggsalazar89@gmail.com', 'Made by Jigg website');
+    $mail->addAddress('jiggsalazar89@gmail.com');
+    $mail->addReplyTo($fields['email'], $fields['name']);
+    $mail->Subject = $fields['subject'] ?: 'New website inquiry';
+    $mail->Body = "Name: {$fields['name']}\nEmail: {$fields['email']}\n" .
+        "Service: {$fields['service']}\n\n{$fields['message']}\n\nSent from madebyjigg.com";
+    return $mail;
+}
+
 function contact_main(): void {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
         header('Allow: POST');
@@ -77,6 +106,20 @@ function contact_main(): void {
     if (!contact_rate_allowed($_SERVER['REMOTE_ADDR'] ?? 'unknown')) {
         header('Retry-After: 600');
         contact_response(429, false, 'Please wait before submitting again, or use email or Messenger.');
+        return;
+    }
+    // The app password is deployed outside the document root with mode 0600.
+    $configPath = dirname(__DIR__, 2) . '/.madebyjigg-mail/smtp.json';
+    if (file_exists($configPath)) {
+        $accepted = false;
+        try {
+            $config = json_decode(file_get_contents($configPath), true);
+            if (is_array($config)) $accepted = contact_mailer($fields, $config)->send();
+        } catch (Throwable $error) {
+            // Do not expose authentication errors, credentials, or message contents.
+        }
+        contact_response($accepted ? 200 : 502, $accepted,
+            $accepted ? 'Message submitted successfully.' : 'We could not confirm email submission. Please use email or Messenger.');
         return;
     }
     if (!function_exists('curl_init')) {

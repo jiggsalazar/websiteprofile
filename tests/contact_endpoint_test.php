@@ -14,6 +14,14 @@ expect(contact_payload(array_merge($valid, ['email' => 'invalid'])) === null, 'R
 expect(contact_payload(array_merge($valid, ['message' => str_repeat('a', 10001)])) === null, 'Bound message size');
 expect(contact_payload(array_merge($valid, ['name' => ['array']])) === null, 'Reject unexpected arrays');
 expect(contact_payload(array_merge($valid, ['message' => '  '])) === null, 'Reject empty message');
+$fields = contact_payload($valid);
+$mailer = contact_mailer($fields, ['username' => 'jiggsalazar89@gmail.com', 'password' => 'test-only-not-a-real-password']);
+expect($mailer->Host === 'smtp.gmail.com' && $mailer->Port === 465 && $mailer->SMTPSecure === 'ssl', 'Use authenticated encrypted Gmail delivery');
+expect($mailer->SMTPAuth && $mailer->SMTPDebug === 0, 'Never log SMTP credentials');
+expect($mailer->getToAddresses()[0][0] === 'jiggsalazar89@gmail.com', 'Keep recipient fixed');
+expect($mailer->getReplyToAddresses()[0][0] === 'visitor@example.com', 'Reply to visitor');
+expect(str_contains($mailer->Body, 'Hello'), 'Keep the message body');
+expect($mailer->preSend(), 'Build a valid MIME message without contacting Gmail');
 
 $_SERVER = ['REQUEST_METHOD' => 'GET'];
 ob_start(); contact_main(); $body = json_decode(ob_get_clean(), true);
