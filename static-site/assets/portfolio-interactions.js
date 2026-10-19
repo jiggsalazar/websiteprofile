@@ -30,6 +30,51 @@
   }
 
   function init() {
+    // Touching the image alternates its preview between the top and bottom.
+    // Keep the caption as a separate full-view action, and allow page swipes.
+    document.querySelectorAll('.bde-scrolling-image, .lumina-portfolio-preview').forEach(function (card) {
+      var start = null;
+      var touchClick = false;
+      var caption = card.querySelector('.ee-scrollimage-caption, .lumina-portfolio-caption');
+      if (caption) {
+        caption.setAttribute('role', 'button');
+        caption.setAttribute('tabindex', '0');
+        caption.setAttribute('aria-label', 'View full design');
+        caption.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
+            caption.click();
+          }
+        });
+      }
+      function updateLabel() {
+        if (!caption) return;
+        if (window.matchMedia('(hover: none), (pointer: coarse)').matches) {
+          caption.textContent = 'Touch image to scroll ↕ · View full design ↗';
+        }
+      }
+      updateLabel();
+      card.addEventListener('pointerdown', function (event) {
+        touchClick = event.pointerType !== 'mouse';
+        start = touchClick ? { x: event.clientX, y: event.clientY, caption: caption && caption.contains(event.target) } : null;
+      }, { passive: true });
+      card.addEventListener('pointerup', function (event) {
+        if (!start) return;
+        if (!start.caption && Math.hypot(event.clientX - start.x, event.clientY - start.y) < 12) {
+          card.classList.toggle('is-touch-bottom');
+        }
+        start = null;
+      }, { passive: true });
+      card.addEventListener('pointercancel', function () { start = null; });
+      card.addEventListener('click', function (event) {
+        if (touchClick && !(caption && caption.contains(event.target))) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+        touchClick = false;
+      });
+    });
     document.querySelectorAll('.bde-scrolling-image').forEach(function (card) {
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');

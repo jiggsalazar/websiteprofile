@@ -230,6 +230,35 @@
 }
 
 /* Touch-friendly previews: every scrolling card is a real, keyboard-usable viewer. */
+.breakdance .bde-scrolling-image {
+  transition: background-position 4.5s ease-in-out;
+}
+@media (hover: none), (pointer: coarse) {
+  .breakdance .bde-scrolling-image,
+  .breakdance .bde-scrolling-image:hover {
+    background-position: center top !important;
+  }
+  .breakdance .bde-scrolling-image.is-touch-bottom {
+    background-position: center bottom !important;
+  }
+  .lumina-portfolio-preview img,
+  .lumina-portfolio-preview:hover img {
+    object-position: center top !important;
+    transition: object-position 4.5s ease-in-out !important;
+  }
+  .lumina-portfolio-preview.is-touch-bottom img {
+    object-position: center bottom !important;
+  }
+}
+.ee-scrollimage-caption[role="button"]:focus-visible,
+.lumina-portfolio-caption[role="button"]:focus-visible {
+  outline: 3px solid #ffb900;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .breakdance .bde-scrolling-image,
+  .lumina-portfolio-preview img { transition-duration: .01s !important; }
+}
 .breakdance .bde-scrolling-image[data-preview-image] {
   cursor: zoom-in;
 }
