@@ -69,6 +69,7 @@ class SiteReadinessTests(unittest.TestCase):
             self.assertEqual(len(forms), 1)
             self.assertEqual(forms[0]['action'], 'https://formsubmit.co/jiggsalazar89@gmail.com')
             self.assertEqual(forms[0]['method'], 'POST')
+            self.assertEqual(forms[0]['data-submit-url'], '/contact/send.php')
             self.assertNotIn('novalidate', forms[0])
             self.assertIn('assets/contact-forms.js?v=20261019', source)
             self.assertIn('assets/contact-forms.css?v=20261019', source)

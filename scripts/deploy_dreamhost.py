@@ -12,6 +12,7 @@ import stat
 import subprocess
 import time
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'static-site'
@@ -75,7 +76,7 @@ def collect_files():
                 raise ValueError(f'Symlinks are not deployable: {name}')
             files[name] = source.read_bytes()
     for name in PAGES + ('assets/responsive.css', 'assets/messenger.js',
-                         'assets/contact-forms.js', 'assets/contact-forms.css'):
+                         'assets/contact-forms.js', 'assets/contact-forms.css', 'contact/send.php'):
         if name not in files or not files[name]:
             raise ValueError(f'Required website file is missing or empty: {name}')
     if '.htaccess' in files:
@@ -144,6 +145,13 @@ def verify(files, commit):
                                        'X-Content-Type-Options', 'Referrer-Policy'):
                             if not response.headers.get(header):
                                 raise RuntimeError(f'Missing live security header: {header}')
+            # GET must execute PHP and refuse to send, rather than expose its source.
+            try:
+                urlopen(f'{URL}/contact/send.php?deploy={commit}', timeout=30)
+                raise RuntimeError('Contact endpoint did not reject GET')
+            except HTTPError as error:
+                if error.code != 405 or json.loads(error.read()).get('success') is not False:
+                    raise RuntimeError('Contact endpoint is not executing correctly') from error
             print(f'Verified {URL} at commit {commit}')
             return
         except Exception:
