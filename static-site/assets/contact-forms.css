@@ -1,0 +1,20 @@
+.contact-backup {
+  grid-column: 1 / -1;
+  flex-basis: 100%;
+  width: 100%;
+  margin: 12px 0 0;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.contact-backup a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-backup a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.contact-honeypot { display: none !important; }
+[data-contact-form] [aria-invalid="true"] { outline: 2px solid #b32828; }

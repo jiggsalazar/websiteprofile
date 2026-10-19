@@ -60,6 +60,22 @@ class SiteReadinessTests(unittest.TestCase):
         self.assertEqual(set(urls), {'https://madebyjigg.com/', 'https://madebyjigg.com/about/',
                                     'https://madebyjigg.com/contact/', 'https://madebyjigg.com/portfolio/'})
 
+    def test_both_contact_forms_have_working_fallbacks(self):
+        for name in ('index.html', 'contact/index.html'):
+            source = (ROOT / 'static-site' / name).read_text(encoding='utf-8')
+            parser = Tags()
+            parser.feed(source)
+            forms = [a for tag, a in parser.tags if tag == 'form' and 'data-contact-form' in a]
+            self.assertEqual(len(forms), 1)
+            self.assertEqual(forms[0]['action'], 'https://formsubmit.co/jiggsalazar89@gmail.com')
+            self.assertEqual(forms[0]['method'], 'POST')
+            self.assertNotIn('novalidate', forms[0])
+            self.assertIn('assets/contact-forms.js?v=20261019', source)
+            self.assertIn('assets/contact-forms.css?v=20261019', source)
+            self.assertTrue(any(t == 'a' and a.get('href') == 'mailto:jiggsalazar89@gmail.com'
+                                and 'data-contact-email' in a for t, a in parser.tags))
+            self.assertTrue(any(t == 'input' and a.get('name') == '_honey' for t, a in parser.tags))
+
     def test_security_header_rendering(self):
         template = (ROOT / 'static-site/.htaccess').read_bytes()
         files = {n: (ROOT / 'static-site' / n).read_bytes() for n in deploy.PAGES}

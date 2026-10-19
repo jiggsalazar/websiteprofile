@@ -74,7 +74,8 @@ def collect_files():
             if source.is_symlink():
                 raise ValueError(f'Symlinks are not deployable: {name}')
             files[name] = source.read_bytes()
-    for name in PAGES + ('assets/responsive.css', 'assets/messenger.js'):
+    for name in PAGES + ('assets/responsive.css', 'assets/messenger.js',
+                         'assets/contact-forms.js', 'assets/contact-forms.css'):
         if name not in files or not files[name]:
             raise ValueError(f'Required website file is missing or empty: {name}')
     if '.htaccess' in files:
@@ -127,6 +128,7 @@ def upload(sftp, name, data):
 def verify(files, commit):
     # A unique query avoids a cached response hiding an unsuccessful upload.
     names = list(PAGES) + [MARKER, 'assets/messenger.js', 'assets/responsive.css']
+    names += ['assets/contact-forms.js', 'assets/contact-forms.css']
     names += [n for n in ('robots.txt', 'sitemap.xml') if n in files]
     expected = dict(files)
     expected[MARKER] = json.dumps({'commit': commit}, sort_keys=True).encode()

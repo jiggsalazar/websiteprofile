@@ -1828,6 +1828,7 @@
     <meta name="twitter:description" content="Website design and development by Jigg Salazar in Cebu City, Philippines. Custom, responsive websites built to turn visitors into clients.">
     <meta name="twitter:image" content="https://madebyjigg.com/assets/local/wp-content/uploads/2025/04/119182495_10220531297131491_4559237394779101438_n.jpg">
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://madebyjigg.com/#person","name":"Jigg Salazar","url":"https://madebyjigg.com/about/","image":"https://madebyjigg.com/assets/local/wp-content/uploads/2025/04/119182495_10220531297131491_4559237394779101438_n.jpg","jobTitle":"Website Developer & Designer","address":{"@type":"PostalAddress","addressLocality":"Cebu City","addressCountry":"PH"},"sameAs":["https://www.facebook.com/Bagigz/","https://www.linkedin.com/in/jigg-salazar-4a8764288/"]},{"@type":"WebSite","@id":"https://madebyjigg.com/#website","url":"https://madebyjigg.com/","name":"Made by Jigg","publisher":{"@id":"https://madebyjigg.com/#person"},"inLanguage":"en"},{"@type":"WebPage","@id":"https://madebyjigg.com/","url":"https://madebyjigg.com/","name":"Jigg Salazar | Website Developer & Designer in Cebu","description":"Website design and development by Jigg Salazar in Cebu City, Philippines. Custom, responsive websites built to turn visitors into clients.","isPartOf":{"@id":"https://madebyjigg.com/#website"},"about":{"@id":"https://madebyjigg.com/#person"},"inLanguage":"en"}]}</script>
+<link rel="stylesheet" href="assets/contact-forms.css?v=20261019">
 </head>
 <body class="home wp-singular page-template-default page page-id-24 wp-theme-breakdance-zero breakdance">
         <section class="bde-section-15-102 bde-section">
@@ -2559,7 +2560,7 @@ contact information
     
     
     
-    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="mailto:?subject=&body=" target="_self" data-type="contact"  >
+    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="mailto:jiggsalazar89@gmail.com" target="_self" data-type="contact"  >
 
     
         <span class="button-atom__text">e-mail: jiggsalazar89@gmail.com</span>
@@ -2616,7 +2617,7 @@ contact information
     
     
     
-    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="tel:" target="_self" data-type="contact"  >
+    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="tel:+639163889386" target="_self" data-type="contact"  >
 
     
         <span class="button-atom__text">Phone: +63 916 388 9386</span>
@@ -3142,7 +3143,12 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
         <p>Got a project in mind, a question, or just want to say hi? Drop me a message &mdash; I'll get back to you soon!</p>
       </div>
     </div>
-    <form class="codex-chat-popup-form" id="codexChatPopupForm" action="#" data-submit-url="https://formsubmit.co/ajax/jiggsalazar89@gmail.com" method="POST" novalidate>
+    <form class="codex-chat-popup-form" id="codexChatPopupForm" action="https://formsubmit.co/jiggsalazar89@gmail.com" data-submit-url="https://formsubmit.co/ajax/jiggsalazar89@gmail.com" method="POST" data-contact-form>
+      <input type="hidden" name="_subject" value="New inquiry from madebyjigg.com">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <label class="contact-honeypot" aria-hidden="true">Leave this blank<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+
       <div class="codex-chat-popup-row">
         <div class="codex-chat-popup-field">
           <label for="codexPopupName">Name</label>
@@ -3173,10 +3179,12 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
         <label for="codexPopupMessage">Message</label>
         <textarea id="codexPopupMessage" name="message" placeholder="Tell me about your project or the support you need..." required></textarea>
       </div>
-      <p class="codex-chat-popup-note">When you submit, your message will be sent directly to Jigg's Gmail.</p>
+      <p class="codex-chat-popup-note">Send your project details to Jigg. You can also use email or Messenger below.</p>
       <button class="codex-chat-popup-submit" type="submit">Submit</button>
       <p class="codex-chat-popup-status" role="status" aria-live="polite"></p>
-    </form>
+
+      <p class="contact-backup">Prefer another way? <a data-contact-email href="mailto:jiggsalazar89@gmail.com">Email Jigg</a> &middot; <a href="https://m.me/Bagigz" target="_blank" rel="noopener noreferrer">Messenger</a></p>
+</form>
   </div>
 </div>
 <script id="codex-chat-bubble-modal-js">
@@ -3194,17 +3202,8 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
     var form = document.getElementById('codexChatPopupForm');
     if (!modal || !form) return;
 
-    var status = form.querySelector('.codex-chat-popup-status');
-    var submit = form.querySelector('.codex-chat-popup-submit');
-    var firstInput = form.querySelector('input, select, textarea, button');
+    var firstInput = form.querySelector('[name="name"]');
     var lastFocused = null;
-
-    function setStatus(message, type) {
-      if (!status) return;
-      status.textContent = message || '';
-      status.classList.remove('is-error', 'is-success');
-      if (type) status.classList.add(type);
-    }
 
     function openModal(event) {
       if (event) event.preventDefault();
@@ -3214,7 +3213,6 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('codex-chat-modal-open');
-      setStatus('', '');
       window.setTimeout(function () {
         if (firstInput) firstInput.focus({ preventScroll: true });
       }, 260);
@@ -3224,7 +3222,6 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
       modal.classList.remove('is-open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('codex-chat-modal-open');
-      setStatus('', '');
       if (lastFocused && typeof lastFocused.focus === 'function') {
         lastFocused.focus({ preventScroll: true });
       }
@@ -3247,58 +3244,7 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
       }
     });
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      var name = (form.querySelector('[name="name"]') || {}).value || '';
-      var email = (form.querySelector('[name="email"]') || {}).value || '';
-      var service = (form.querySelector('[name="service"]') || {}).value || '';
-      var subject = (form.querySelector('[name="subject"]') || {}).value || '';
-      var message = (form.querySelector('[name="message"]') || {}).value || '';
-      var emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-      if (!name.trim() || !emailValid || !message.trim()) {
-        setStatus('Please complete your name, a valid email, and your message.', 'is-error');
-        return;
-      }
-
-      var endpoint = form.getAttribute('data-submit-url');
-      var payload = {
-        _subject: subject.trim() || 'New portfolio inquiry from ' + name.trim(),
-        _template: 'table',
-        _captcha: 'false',
-        _replyto: email.trim(),
-        _url: window.location.href,
-        name: name.trim(),
-        email: email.trim(),
-        service: service,
-        subject: subject.trim(),
-        message: message.trim()
-      };
-
-      submit.disabled = true;
-      submit.classList.add('is-loading');
-      setStatus('Sending your message...', '');
-
-      fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      }).then(function (response) {
-        if (!response.ok) throw new Error('Message was not sent.');
-        return response.json().catch(function () { return {}; });
-      }).then(function () {
-        form.reset();
-        setStatus('Message sent! Jigg will be right back with you.', 'is-success');
-      }).catch(function () {
-        setStatus('Something went wrong. Please try again or email Jigg directly.', 'is-error');
-      }).finally(function () {
-        submit.disabled = false;
-        submit.classList.remove('is-loading');
-      });
-    });
   });
 })();
 </script>
@@ -3306,6 +3252,7 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
     <script>
 (()=>{const section=document.querySelector('.tools-journey');if(!section)return;if(!('IntersectionObserver' in window))return;const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>section.classList.toggle('journey-in-view',entry.isIntersecting));},{threshold:.12});observer.observe(section);})();
 </script><script id="jigg-messenger-script" src="assets/messenger.js?v=20261016-party" defer></script>
+<script src="assets/contact-forms.js?v=20261019" defer></script>
 </body>
     </html>
     

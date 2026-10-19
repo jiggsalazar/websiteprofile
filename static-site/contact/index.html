@@ -1275,6 +1275,7 @@
     <meta name="twitter:description" content="Have a website project in mind? Contact Jigg Salazar in Cebu City, Philippines, to discuss website design, development, or improvements to your site.">
     <meta name="twitter:image" content="https://madebyjigg.com/assets/local/wp-content/uploads/2025/04/119182495_10220531297131491_4559237394779101438_n.jpg">
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://madebyjigg.com/#person","name":"Jigg Salazar","url":"https://madebyjigg.com/about/","image":"https://madebyjigg.com/assets/local/wp-content/uploads/2025/04/119182495_10220531297131491_4559237394779101438_n.jpg","jobTitle":"Website Developer & Designer","address":{"@type":"PostalAddress","addressLocality":"Cebu City","addressCountry":"PH"},"sameAs":["https://www.facebook.com/Bagigz/","https://www.linkedin.com/in/jigg-salazar-4a8764288/"]},{"@type":"WebSite","@id":"https://madebyjigg.com/#website","url":"https://madebyjigg.com/","name":"Made by Jigg","publisher":{"@id":"https://madebyjigg.com/#person"},"inLanguage":"en"},{"@type":"ContactPage","@id":"https://madebyjigg.com/contact/","url":"https://madebyjigg.com/contact/","name":"Contact Jigg Salazar | Website Design & Development","description":"Have a website project in mind? Contact Jigg Salazar in Cebu City, Philippines, to discuss website design, development, or improvements to your site.","isPartOf":{"@id":"https://madebyjigg.com/#website"},"about":{"@id":"https://madebyjigg.com/#person"},"inLanguage":"en"},{"@type":"BreadcrumbList","@id":"https://madebyjigg.com/contact/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madebyjigg.com/"},{"@type":"ListItem","position":2,"name":"Contact","item":"https://madebyjigg.com/contact/"}]}]}</script>
+<link rel="stylesheet" href="../assets/contact-forms.css?v=20261019">
 </head>
 <body class="wp-singular page-template-default page page-id-18 wp-theme-breakdance-zero breakdance">
         <section class="bde-section-15-102 bde-section">
@@ -1481,7 +1482,12 @@ Let’s team up to create something amazing for your business!
         </div>
       </div>
 
-      <form class="codex-contact-form" id="codexContactForm" action="#contact-form" data-submit-url="https://formsubmit.co/ajax/jiggsalazar89@gmail.com" method="POST" novalidate>
+      <form class="codex-contact-form" id="codexContactForm" action="https://formsubmit.co/jiggsalazar89@gmail.com" data-submit-url="https://formsubmit.co/ajax/jiggsalazar89@gmail.com" method="POST" data-contact-form>
+      <input type="hidden" name="_subject" value="New inquiry from madebyjigg.com">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <label class="contact-honeypot" aria-hidden="true">Leave this blank<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+
         <div class="codex-contact-form-row">
           <div class="codex-contact-field">
             <label for="contact-name">Name</label>
@@ -1515,9 +1521,11 @@ Let’s team up to create something amazing for your business!
         </div>
 
         <div class="codex-contact-bottom-row">
-          <p class="codex-contact-form-note">When you submit, your message will be sent directly to Jigg's Gmail.</p>
+          <p class="codex-contact-form-note">Send your project details to Jigg. You can also use email or Messenger below.</p>
           <button class="codex-contact-submit" type="submit">Submit</button>
           <p class="codex-contact-status" id="codexContactStatus" role="status" aria-live="polite"></p>
+
+      <p class="contact-backup">Prefer another way? <a data-contact-email href="mailto:jiggsalazar89@gmail.com">Email Jigg</a> &middot; <a href="https://m.me/Bagigz" target="_blank" rel="noopener noreferrer">Messenger</a></p>
         </div>
       </form>
     </div>
@@ -1636,7 +1644,7 @@ contact information
     
     
     
-    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="mailto:?subject=&body=" target="_self" data-type="contact"  >
+    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="mailto:jiggsalazar89@gmail.com" target="_self" data-type="contact"  >
 
     
         <span class="button-atom__text">e-mail: jiggsalazar89@gmail.com</span>
@@ -1693,7 +1701,7 @@ contact information
     
     
     
-    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="tel:" target="_self" data-type="contact"  >
+    <a class="breakdance-link button-atom button-atom--text bde-button__button" href="tel:+639163889386" target="_self" data-type="contact"  >
 
     
         <span class="button-atom__text">Phone: +63 916 388 9386</span>
@@ -2182,119 +2190,9 @@ new AwesomeMenu(".breakdance .bde-menu-17-120 .breakdance-menu", {
   }
 });
  }) </script>
-<script id="codex-contact-form-js">
-  document.addEventListener('DOMContentLoaded', function () {
-    var form = document.getElementById('codexContactForm');
-    if (!form) return;
 
-    var status = document.getElementById('codexContactStatus');
-    if (status) status.textContent = '';
-    var fields = {
-      name: document.getElementById('contact-name'),
-      email: document.getElementById('contact-email'),
-      service: document.getElementById('contact-service'),
-      subject: document.getElementById('contact-subject'),
-      message: document.getElementById('contact-message')
-    };
-
-    function setInvalid(field, invalid) {
-      if (!field) return;
-      if (invalid) {
-        field.setAttribute('aria-invalid', 'true');
-      } else {
-        field.removeAttribute('aria-invalid');
-      }
-    }
-
-    function handleContactSubmit(event) {
-      if (event.__codexHandled) return false;
-      event.__codexHandled = true;
-      event.preventDefault();
-      event.stopPropagation();
-      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-
-      var name = fields.name.value.trim();
-      var email = fields.email.value.trim();
-      var service = fields.service.value.trim();
-      var customSubject = fields.subject.value.trim();
-      var message = fields.message.value.trim();
-      var firstInvalid = null;
-      var submitButton = form.querySelector('.codex-contact-submit');
-
-      setInvalid(fields.name, !name);
-      setInvalid(fields.email, !email || !fields.email.checkValidity());
-      setInvalid(fields.message, !message);
-
-      if (!name) firstInvalid = firstInvalid || fields.name;
-      if (!email || !fields.email.checkValidity()) firstInvalid = firstInvalid || fields.email;
-      if (!message) firstInvalid = firstInvalid || fields.message;
-
-      if (firstInvalid) {
-        status.textContent = 'Please complete your name, a valid email, and your message.';
-        firstInvalid.focus();
-        return;
-      }
-
-      var payload = {
-        _subject: customSubject || ('New inquiry from ' + name + ' - ' + service),
-        _template: 'table',
-        _captcha: 'false',
-        _replyto: email,
-        _url: window.location.href,
-        name: name,
-        email: email,
-        service: service,
-        message: message
-      };
-
-      status.textContent = 'Sending your message...';
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sending...';
-
-      fetch(form.getAttribute('data-submit-url'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(function (response) {
-          if (!response.ok) throw new Error('Submission failed');
-          return response.json();
-        })
-        .then(function () {
-          status.classList.add('is-success');
-          status.textContent = 'Message sent! Jigg will be right back with you.';
-          form.reset();
-        })
-        .catch(function () {
-          status.classList.remove('is-success');
-          status.textContent = 'Sorry, the message could not be sent. Please email jiggsalazar89@gmail.com directly.';
-        })
-        .finally(function () {
-          submitButton.disabled = false;
-          submitButton.textContent = 'Submit';
-        });
-      return false;
-    }
-
-    window.codexHandleContactSubmit = handleContactSubmit;
-    form.addEventListener('submit', handleContactSubmit);
-
-    ['name', 'email', 'message'].forEach(function (key) {
-      if (!fields[key]) return;
-      fields[key].addEventListener('input', function () {
-        setInvalid(fields[key], false);
-        if (status) {
-          status.classList.remove('is-success');
-          status.textContent = '';
-        }
-      });
-    });
-  });
-</script>
     <script id="jigg-messenger-script" src="../assets/messenger.js?v=20261016-party" defer></script>
+<script src="../assets/contact-forms.js?v=20261019" defer></script>
 </body>
     </html>
     

@@ -35,6 +35,7 @@ jobs:
       - name: Validate website and deployment tests
         run: |
           python -m unittest discover -s tests -p 'test_*.py'
+          node --test tests/contact_forms.test.cjs
           python scripts/deploy_dreamhost.py --check
       - name: Check hosting credential
         env:
