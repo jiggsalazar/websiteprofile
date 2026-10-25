@@ -25,7 +25,7 @@ MARKER = 'deployment-version.json'
 MAIL_DIRECTORY = '/home/dh_924vay/.madebyjigg-mail'
 PAGES = ('index.html', 'about/index.html', 'portfolio/index.html', 'contact/index.html')
 PUBLIC_DIRS = {'assets', 'about', 'contact', 'portfolio', 'previews', 'wp-content'}
-PUBLIC_ROOT = {'index.html', '.htaccess', 'robots.txt', 'sitemap.xml', '404.html', 'favicon.svg'}
+PUBLIC_ROOT = {'index.html', '.htaccess', 'robots.txt', 'sitemap.xml', '404.html', 'favicon.svg', 'favicon.png', 'favicon.ico', 'apple-touch-icon.png'}
 
 
 def public_file(name):
